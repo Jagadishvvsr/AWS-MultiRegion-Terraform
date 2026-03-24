@@ -61,7 +61,7 @@ locals {
 
 resource "aws_vpc" "Custom_vpc" {
   cidr_block = var.Vpc_Cidr_Block
-  region = var.region
+  #region = var.region
   instance_tenancy = var.instance_tenancy    
   enable_dns_support = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames 
@@ -78,7 +78,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id     = aws_vpc.Custom_vpc.id
   cidr_block = each.value.cidr
   availability_zone = each.value.az
-  region = var.Vpc_region
+  #region = var.Vpc_region
 
   tags = {
     Name = "Public-${each.key}-Env
@@ -94,7 +94,7 @@ resource "aws_subnet" "private_subnet"{
   vpc_id     = aws_vpc.Custom_vpc.id
   cidr_block = each.value.cidr
   availability_zone = each.value.az
-  region = var.Vpc_region
+  #region = var.Vpc_region
 
   tags = {
     Name = "Public-${each.key}-Env
@@ -104,7 +104,7 @@ resource "aws_subnet" "private_subnet"{
 
 resource "aws_eip" "nat-eip" {
  for_each = aws_subnet.public_subnet
- region = var.Vpc_region
+ #region = var.Vpc_region
  domain = vpc
 
 }

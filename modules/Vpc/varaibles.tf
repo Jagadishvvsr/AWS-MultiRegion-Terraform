@@ -36,11 +36,11 @@ varaible "private_subnet_count" {
 }
 
 
-varaible "Vpc_region" {
+/* varaible "Vpc_region" {
     description = "VPC region"
     type = "String"
     default = "us-east-1"
-}
+} */
 
 varaible "instance_tenancy" {
     description = "Tenancy for the vpc hosts"
