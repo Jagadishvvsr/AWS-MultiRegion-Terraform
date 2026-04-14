@@ -1,4 +1,4 @@
-varaible "Vpc_Cidr_Block" {
+variable "Vpc_Cidr_Block" {
      description = "This is VPC cidr block"
      type= string
      default = "10.0.0.0/16"
@@ -23,13 +23,13 @@ variable "private_subnets" {
   default = []
 }
 
-varaible "public_subnet_count" {
+variable "public_subnet_count" {
     description = "no of public subnet"
     type = number
     default = 0
 }
 
-varaible "private_subnet_count" {
+variable "private_subnet_count" {
     description = "no of private subnet"
     type = number
     default = 0
@@ -38,19 +38,30 @@ varaible "private_subnet_count" {
 
 /* varaible "Vpc_region" {
     description = "VPC region"
-    type = "String"
+    type = String
     default = "us-east-1"
 } */
 
-varaible "instance_tenancy" {
+variable "instance_tenancy" {
     description = "Tenancy for the vpc hosts"
-    type = "String"
+    type = string
     default = "default"
 }
 
-varaible "enable_dns_hostnames " {
+variable "enable_dns_hostnames" {
    description = "enable dns hostnames"
-   type = "boolean"
-   default = "false"
+   type = bool
+   default = false
 
+}
+
+variable "enable_dns_support" {
+   description = "enable dns support"
+   type = bool
+   default = false
+
+}
+
+variable "private_offset" {
+  default = 100
 }

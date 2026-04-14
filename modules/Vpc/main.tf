@@ -19,18 +19,16 @@ locals {
     public_subnet_final = local.use_public_custom ? [
     
    for i, subnet in var.public_subnets : {
-     cidr = subnet.cidr != null ? subnet.cidr :
-     cidrsubnet(aws_vpc.Custom_vpc.cidr_block, 8 , i)
+     cidr = subnet.cidr != null ? subnet.cidr : cidrsubnet(aws_vpc.Custom_vpc.cidr_block, 8 , i)
    
-   az = subnet.az != null ? subnet.az :
-       data.aws_availability_zones.availability_zones.names[ i % length(data.aws_availability_zones.availability_zones.names)]
+   az = subnet.az != null ? subnet.az : data.aws_availability_zones.availability_zones.names[ i % length(data.aws_availability_zones.availability_zones.names)]
     }
     ] : [
     
     for i in range(var.public_subnet_count) : {
       cidr = cidrsubnet(aws_vpc.Custom_vpc.cidr_block, 8 , i)
 
-      az = data.aws_availability_zones.availability_zones.names[ i % lenth(data.aws_availability_zones.availability_zones.names)]
+      az = data.aws_availability_zones.availability_zones.names[ i % length(data.aws_availability_zones.availability_zones.names)]
     }
 
     ]
@@ -41,7 +39,7 @@ locals {
 
  private_subnet_final = local.use_private_custom ? [
     for i , subnet in var.private_subnets : {
-     cidr = subnet.cidr != null ? : subnet.cidr : cidrsubnet(aws_vpc.Custom_vpc.cidr_block, 8, i)}
+     cidr = subnet.cidr != null ?  subnet.cidr : cidrsubnet(aws_vpc.Custom_vpc.cidr_block, 8, i + var.private_offset)
 
     az = subnet.az != null ? subnet.az : data.aws_availability_zones.availability_zones.names[ i % length(data.aws_availability_zones.availability_zones.names)]
     }
@@ -49,7 +47,7 @@ locals {
  ] : [
 
   for i in range(var.private_subnet_count) : {
-    cidr = cidrsubnet(aws_vpc.Custom_vpc.cidr_block , 8 , i )
+    cidr = cidrsubnet(aws_vpc.Custom_vpc.cidr_block , 8 , i + var.private_offset)
 
     az = data.aws_availability_zones.availability_zones.names[i % length(data.aws_availability_zones.availability_zones.names)]
   
@@ -66,6 +64,9 @@ resource "aws_vpc" "Custom_vpc" {
   enable_dns_support = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames 
   
+  tags = {
+    name = "custom-vpc"
+  }
 
 }
 
@@ -81,7 +82,7 @@ resource "aws_subnet" "public_subnet" {
   #region = var.Vpc_region
 
   tags = {
-    Name = "Public-${each.key}-Env
+    Name = "Public-${each.key}-Env"
   }
 }
 
@@ -97,7 +98,7 @@ resource "aws_subnet" "private_subnet"{
   #region = var.Vpc_region
 
   tags = {
-    Name = "Public-${each.key}-Env
+    Name = "Private-${each.key}-Env"
   }
 
 }
@@ -105,7 +106,7 @@ resource "aws_subnet" "private_subnet"{
 resource "aws_eip" "nat-eip" {
  for_each = aws_subnet.public_subnet
  #region = var.Vpc_region
- domain = vpc
+ domain = "vpc"
 
 }
 
@@ -136,7 +137,6 @@ resource "aws_route_table" "public_routetable" {
 
   vpc_id = aws_vpc.Custom_vpc.id
 
-  route = []
 
   tags = {
     Name = "Public-${aws_vpc.Custom_vpc.id}_routetable"
@@ -146,12 +146,11 @@ resource "aws_route_table" "public_routetable" {
 
 
 resource "aws_route_table" "private_routetable" {
- for_each = aws_subnet.private_subnet
+  for_each = aws_subnet.private_subnet
 
   vpc_id = aws_vpc.Custom_vpc.id
 
-  route = []
-
+ 
   tags = {
     Name = "Private-${aws_vpc.Custom_vpc.id}_routetable"
   }
@@ -175,15 +174,15 @@ resource "aws_route_table_association" "pubsubnet_assoc" {
 resource "aws_route" "route_private" {
   for_each = aws_subnet.private_subnet
   
-  route_table_id            = aws_route_table.private_routetable.id
+  route_table_id            = aws_route_table.private_routetable[each.key].id
   destination_cidr_block    = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.public_NAT_gateway.id
+  nat_gateway_id = aws_nat_gateway.public_NAT_gateway[each.key].id
 
 }
 
-source "aws_route_table_association" "privatesubnet_assoc" {
+resource "aws_route_table_association" "privatesubnet_assoc" {
   for_each = aws_subnet.private_subnet
 
   subnet_id      = each.value.id
-  route_table_id = aws_route_table.private_routetable.id
+  route_table_id = aws_route_table.private_routetable[each.key].id
 }
