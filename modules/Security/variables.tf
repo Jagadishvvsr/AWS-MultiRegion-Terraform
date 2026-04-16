@@ -1,3 +1,8 @@
+variable "Custom_vpc" {
+    description = "VPC id"
+    type = string
+    default = "vpc-0e217bba014f53293"
+}
 variable "Aurora_inbound_port" {
     description = "Inbound port for Aurora"
     type = number
@@ -10,7 +15,7 @@ variable "ASG_inbound_port_for_ALB" {
     default = [443]
 }
 
-variable "ASG_inbound_rules_" {
+variable "ASG_inbound_rules_other" {
     description = "Allowing inbound resource to ASG"
     type = map(object({
         type = string  # sg or cidr
