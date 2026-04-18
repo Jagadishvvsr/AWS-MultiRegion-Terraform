@@ -3,17 +3,17 @@ locals {
 }
 
 
-resource "aws_launch_template" "Blue_prod_template" {
-  name = "Application-blue-${local.ENV}"
-  image_id = var.Blue_prod_template_AMI
-  instance_type = var.blue_instance_type
-  vpc_security_group_ids = [var.blue_template_security_group]
-  key_name = var.create_key == 0 ? var.blue_instance_keyname : var.public_key_path
+resource "aws_launch_template" "Application_template" {
+  name = "${var.Template_name}-${local.ENV}"
+  image_id = var.template_AMI
+  instance_type = var.instance_type
+  vpc_security_group_ids = [var.template_security_group]
+  key_name = var.create_key == 0 ? var.instance_keyname : var.public_key_path
 
   user_data = filebase64(var.user_data)
 
   iam_instance_profile {
-    name = var.blue_instance_profile
+    name = var.instance_profile
   }
   disable_api_stop        = true
   disable_api_termination = true
@@ -43,14 +43,14 @@ resource "aws_launch_template" "Blue_prod_template" {
     resource_type = "instance"
 
     tags = {
-      Name = "blue(live)_APPLication_${local.ENV}"
+      Name = "${var.Template_name}-${local.ENV}"
     }
   }
   tag_specifications {
     resource_type = "volume"
 
     tags = {
-      Name = "blue(live)_Application_volume_${local.ENV}"
+      Name = "Application_volume_${local.ENV}"
     }
   }
 

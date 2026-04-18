@@ -4,27 +4,33 @@ variable "environment" {
     default = "dev"
 }
 
+variable "Template_name" {
+    description = "name of the template"
+    type = string
+    default = "Application-TL"
+}
 
-variable "Green_prod_template_AMI" {
-    description = "Green launch template"
+
+variable "template_AMI" {
+    description = "blue launch template"
     type = string 
     default = "ami-0ec10929233384c7f"
    
 }
 
-variable "green_instance_type" {
+variable "instance_type" {
     description = "Live instance type "
     type = string
     default = "t3.micro"
 }
 
-variable "green_instance_profile" {
+variable "instance_profile" {
     description = "Live instance profile "
     type = string
     default = null
 } 
 
-variable "green_template_security_group" {
+variable "template_security_group" {
     description = "Security group Id"
     type = string
     default = "sg-01c5c288dffd88804"
@@ -41,7 +47,7 @@ variable "public_key_path" {
     default = null
 }
 
-variable "green_instance_keyname" {
+variable "instance_keyname" {
      description = "key for instances"
      type = string
      default = "ansible"
