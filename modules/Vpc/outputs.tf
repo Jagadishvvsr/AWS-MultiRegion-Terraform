@@ -9,11 +9,11 @@ output "elastic_ip" {
     } 
 }
 
-output "debug_public_subnets" {
+output "public_subnets" {
   value = var.public_subnets
 }
 
-output "debug_private_subnets" {
+output "private_subnets" {
   value = var.private_subnets
 }
 
