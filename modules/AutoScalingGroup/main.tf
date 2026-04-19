@@ -2,14 +2,17 @@ locals {
     Env = var.environement
 }
 
+
 resource "aws_autoscaling_group" "AutoScaler_application" {
-  name = "${var.name}-${local.Env}"
+  name = "${var.asg_name}-${local.Env}"
   capacity_rebalance  = var.capacity_rebalance
-  desired_capacity    = 2
-  max_size            = 4
-  min_size            = 2
-  vpc_zone_identifier = [aws_subnet.example1.id, aws_subnet.example2.id]
+  desired_capacity    = var.desired_capacity
+  max_size            = var.max_size
+  min_size            = var.min_size
+  vpc_zone_identifier = [ "subnet-084d349a44e1854e1", "subnet-04035f4c858511081", "subnet-0e6c444e98ba29a85"]
   default_instance_warmup = 200
+  health_check_grace_period = var.health_check_grace_period
+  health_check_type  = var.health_check_type
   instance_maintenance_policy {
     min_healthy_percentage = 100
     max_healthy_percentage = 110
@@ -22,15 +25,15 @@ resource "aws_autoscaling_group" "AutoScaler_application" {
     triggers = ["launch_template"]
   }
 
-  warm_pool {
+  /* warm_pool {
     pool_state                  = "Hibernated"
-    min_size                    = 1
-    max_group_prepared_capacity = 10
+    min_size                    = 5
+    max_group_prepared_capacity = 20
 
     instance_reuse_policy {
       reuse_on_scale_in = true
     }
-  }
+  } */
 
   mixed_instances_policy {
     instances_distribution {
@@ -47,13 +50,13 @@ resource "aws_autoscaling_group" "AutoScaler_application" {
       }
 
       override {
-        instance_type     = "c4.large"
-        weighted_capacity = "3"
+        instance_type     = var.Primary_intance_type
+        weighted_capacity = var.Primary_intance_weight_capacity
       }
 
       override {
-        instance_type     = "c3.large"
-        weighted_capacity = "2"
+        instance_type     = var.Secondary_intance_type
+        weighted_capacity = var.Secondary_intance_weight_capacity
       }
     }
   }
