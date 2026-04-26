@@ -4,6 +4,18 @@ variable "asg_name" {
     default = "Application_asg"
 }
 
+variable "default_instance_warmup"{
+    description = "Default instance warmup seconds"
+    type = number
+    default = 200
+ }
+
+variable "subnet_ids" {
+  description = "list of subnets"
+  type = list(string)
+  default = ["subnet-0e6c444e98ba29a85" , "subnet-04035f4c858511081", "subnet-084d349a44e1854e1", "subnet-047cd2924b499baf1", "subnet-09f277e47bbb93b77"]
+}
+
 variable "environement" {
     description = "environement of the ASG"
     type = string
@@ -13,7 +25,7 @@ variable "environement" {
 variable "launch_template" {
     description = "launch template ID"
     type = string
-    default = "lt-01bf83a957d64c193"
+    default = "lt-0f3550fe97f17679c"
 }
 
 variable "capacity_rebalance" {
@@ -49,26 +61,46 @@ variable "template_version" {
 
 }
 
-
-variable "Primary_intance_type" {
-    description = "Primary instance type "
-    type= string
-    default = "t3.micro"
+variable "Scale_out_estimated_warm_out" {
+    description = "cool down period after scale out activity"
+    type = number
+    default = 200
 }
 
-variable "Primary_intance_weight_capacity" {
+variable "Scale_out_estimated_warm_in" {
+    description = "cool down period after scale in activity"
+    type = number
+    default = 200
+}
+
+variable "Scale_in_cooldown" {
+    description = "cool down period after scale in activity"
+    type = number
+    default = 300
+}
+
+
+
+
+variable "Primary_instance_type" {
+    description = "Primary instance type "
+    type= string
+    default = "m6idn.large"
+}
+
+variable "Primary_instance_weight_capacity" {
     description = "Primary instance type weight"
     type= number
     default = 3
 }
 
-variable "Secondary_intance_type" {
+variable "Secondary_instance_type" {
     description = "Secondary instance type "
     type= string
-    default = "m6id.xlarge"
+    default = "r8a.large"
 }
 
-variable "Secondary_intance_weight_capacity" {
+variable "Secondary_instance_weight_capacity" {
     description = "Secondary instance type weight"
     type= number
     default = 2
