@@ -130,3 +130,8 @@ variable "Policy_scaling_alarm_cpu_low" {
     type = string
     default = "cpu-low-30"
 }
+
+variable "target_group_arns" {
+    description = "target group to be provided"
+    type = list(string)
+}

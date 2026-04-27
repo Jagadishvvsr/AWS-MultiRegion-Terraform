@@ -15,6 +15,8 @@ resource "aws_autoscaling_group" "AutoScaler_application" {
   health_check_type  = var.health_check_type
   max_instance_lifetime =  86400
 
+  target_group_arns = var.target_group_arns
+
 
   instance_maintenance_policy {
     min_healthy_percentage = 100
