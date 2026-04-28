@@ -7,110 +7,59 @@ variable "Environment" {
 variable "Name" {
     description = "name of the load balancer"
     type = string
-    default = "Application_load_balancer"
+    default = "Application-load-balancer"
 }
 
-variable "security_groups" {
-    description = "name of the load balancer"
-    type = list(string)
-    default = ["", "", ""]
-}
+
 
 
 variable "security_groups" {
     description = "list of security groups for the load balancer"
     type = list(string)
-    default = ["", "", ""]
+    default = ["sg-08d37cd14dde8f682"]
 }
 
 
 variable "subnet_ids" {
     description = "list of subnet ids for the load balancer"
     type = list(string)
-    default = ["", "", ""]
+    default = ["subnet-084d349a44e1854e1", "subnet-04035f4c858511081", "subnet-0e6c444e98ba29a85"]
 }
 
 
-variable "port" {
-    description = "port for the target group"
+
+variable "Listener_port" {
+    description = "Listener port number"
     type = number
     default = 80
 }
 
-
-variable "protocol" {
-    description = "protocol for the target group"
+variable "Listener_protocol" {
+    description = "Listener portocol"
     type = string
-    default = HTTP
+    default = "HTTP"
 }
 
-variable "health_check_path" {
-    description = "health check path on the target server"
+variable "HTTPS_ssl_policy" {
+    description = "ssl certificate policy" 
     type = string
-    default = "/"
 }
 
-variable "health_check_timeout" {
-    description = "health check timoeut period"
-    type = number
-    default = 300
-}
-
-variable "unhealth_threshold" {
-    description = "unhealthy threshold"
-    type = number
-    default = 3
-}
-
-
-variable "healthy_threshold" {
-    description = "healthy threshold"
-    type = number
-    default = 2
-}
-
-
-variable "health_check_interval" {
-    description = "health check interval"
-    type = number
-    default = 300
-}
-
-
-variable "matcher" {
-    description = "matcher for target group to consider healthy status"
-    type = list(number)
-    default = [200]
-}
-
-
-variable "deregistration_delay" {
-    description = "deregistration delay period"
-    type = number
-    default = 300
-}
-
-variable "load_balancing_algorithm_type" {
-    description = "load balancing algorithm for the target group"
+variable "HTTPS_certificate_arn" {
+    description = "ssl certificate arn"
     type = string
-    default = " weighted_random"
+
 }
 
-variable "slow_start" {
-    description = "slow start period"
-    type = number
-    default = 300
-}
-
-variable "stickiness" {
-    description = "enable/disable stickness"
-    type = boolean
-    default = true
-}
-
-
-variable "load_balancing_cross_zone_enabled" {
-    description = "cross zone load balancing"
+variable "aws_target_group_blue" {
+    description = "blue target group arn"
     type = string
-    default = "use_load_balancer_configuration"
 }
+
+variable "aws_target_group_green" {
+    description = "green target group arn"
+    type = string
+    default = null
+}
+
+
