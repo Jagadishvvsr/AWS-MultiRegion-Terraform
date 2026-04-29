@@ -6,18 +6,29 @@ resource "aws_lb_listener" "Application_TG_http" {
   port              = var.Listener_port
   protocol          = var.Listener_protocol
 
+  tags = {
+    name = "${var.Listener_name}-${var.Environment}"
+    Environment = var.Environment
+  }
+
   default_action {
     type = "forward"
 
     forward {
       target_group {
         arn    = var.aws_target_group_blue
-        weight = 100
+        weight = var.target_group_blue_weight
       }
      /* target_group {
         arn    = var.aws_target_group_green
-        weight = 0
+        weight = var.target_group_green_weight
       } */
+
+      stickiness {
+          enabled = var.stickiness
+          duration = var.stickiness_duration
+
+        }
     }
   }
 }
@@ -31,6 +42,12 @@ resource "aws_lb_listener" "Application_TG_https" {
   protocol          = var.Listener_protocol
   ssl_policy        = var.HTTPS_ssl_policy
   certificate_arn  =  var.HTTPS_certificate_arn 
+
+  tags = {
+    name = "${var.Listener_name}-${var.Environment}"
+    Environment = var.Environment
+  }
+
  
 
   default_action {
