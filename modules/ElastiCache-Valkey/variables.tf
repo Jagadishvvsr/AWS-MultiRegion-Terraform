@@ -1,11 +1,11 @@
 variable "name" {
     description = "Name of the cache cluster-id"
-    type - string
-    default = "application_cross_region"
+    type = string
+    default = "application-cross-region"
 }
 
 variable "environment" {
-    description" = "environment for the cache"
+    description = "environment for the cache"
     type = string
     default = "dev"
 }
@@ -19,18 +19,23 @@ variable "engine" {
 variable "engine_version" {
     description = "cache engine version"
     type = string
-    default = "3.2.10"
+    default = "8.2"
+
+    validation {
+     condition     = can(regex("^\\d+\\.\\d+", var.engine_version))
+     error_message = "Engine version must be valid semantic version."
+  }
 }
 
 variable "node_type" {
     description = "cache node type"
     type = string
-    default = "t3.micro"
+    default = "cache.m4.xlarge"
 }
 
 
-variable "num_cache_nodes" {
-    description = "number of cache nodes"
+variable "num_cache_clusters" {
+    description = "number of cache clusters"
     type = number
     default = 1
 }
@@ -39,7 +44,7 @@ variable "num_cache_nodes" {
 variable "parameter_group_name" {
     description = "cache parameter paramete"
     type = string
-    default = "default.redis3.2"
+    default = "default.valkey8"
 }
 
 variable "port" {
@@ -52,13 +57,13 @@ variable "port" {
 variable "cache_subnetgroup_ids" {
     description = "cache subnet groups ids"
     type = list(string)
-    default = ["", ""]
+    default = ["subnet-084d349a44e1854e1", "subnet-04035f4c858511081", "subnet-0e6c444e98ba29a85"]
 }
 
 variable "preferred_availability_zones" {
     description = "preferred availability zones for cache"
     type = list(string)
-    default = ["", ""]
+    default = ["us-east-1e"] # "us-east-1a", "us-east-1d"
 }
 
 variable "transit_encryption_enabled" {
@@ -70,7 +75,7 @@ variable "transit_encryption_enabled" {
 variable "security_group_ids" {
     description = "security group ids for the cluster"
     type = list(string)
-    default = ["" ,""]
+    default = ["sg-0808c9d229917ac5d"]
 }
 
 variable "snapshot_retention_limit" {
@@ -82,7 +87,7 @@ variable "snapshot_retention_limit" {
 variable "snapshot_window" {
     description = "window for daily automatic snapshot time range (in UTC)"
     type = string
-    default = "05:00-09:00"
+    default = "03:00-05:00"
 }
 
 variable "maintenance_window" {
@@ -103,44 +108,38 @@ variable "sns_topic_arn" {
     default = null
 }
 
-variable "cloudwatch_log_configuration" {
-    description = "cloud watch log group configuration for log delivery"
-    type = object({
-        description = string
-        destination_type = string
-        log_format = string
-        log_type = string
-    }
-    )
-   
-}
-
-variable "cloudwatch_log_configuration" {
-    description = "cloud watch log group configuration for log delivery"
-    type = object({
-        destination = string
-        destination_type = string
-        log_format = string
-        log_type = string
-    }
-    )
-   
-}
-
-variable "data_firehose_configuration" {
-    description = "kenisis data firehose configuration for log delivery"
-    type = object({
-        destination = string
-        destination_type = string
-        log_format = string
-        log_type = string
-    }
-    )
-   
-}
 
 variable "secondary_region" {
     description = "Region for secondary replication"
-    type = "string"
+    type = string
     default = "us-west-1"
+}
+
+
+variable "slow_log_configuration" {
+    description = "slow log configuration"
+    type = object({
+        destination = string
+        destination_type = string
+        log_format = string
+    })
+    default = ({
+        destination = "elasticCache"
+        destination_type = "cloudwatch-logs"
+        log_format = "text"
+    })
+}
+
+variable "engine_log_configuration" {
+    description = "engine log configuration"
+    type = object({
+        destination = string
+        destination_type = string
+        log_format = string
+    })
+    default = ({
+        destination = "elasticCache"
+        destination_type = "cloudwatch-logs"
+        log_format = "text"
+    })
 }
