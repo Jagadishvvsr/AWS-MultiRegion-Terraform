@@ -9,5 +9,5 @@ terraform {
 
  provider "aws" {
   alias  = "secondary"
-  region = "us-west-1"
+  region = "us-west-2"
 }

@@ -30,7 +30,7 @@ variable "engine_version" {
 variable "node_type" {
     description = "cache node type"
     type = string
-    default = "cache.m4.xlarge"
+    default = "cache.c7gn.large"
 }
 
 
@@ -57,13 +57,13 @@ variable "port" {
 variable "cache_subnetgroup_ids" {
     description = "cache subnet groups ids"
     type = list(string)
-    default = ["subnet-084d349a44e1854e1", "subnet-04035f4c858511081", "subnet-0e6c444e98ba29a85"]
+    default = [ "subnet-04035f4c858511081", "subnet-047cd2924b499baf1", "subnet-0a888a7437dfb6550"]
 }
 
 variable "preferred_availability_zones" {
     description = "preferred availability zones for cache"
     type = list(string)
-    default = ["us-east-1e"] # "us-east-1a", "us-east-1d"
+    default = ["us-east-1a"] # "us-east-1a", "us-east-1d"
 }
 
 variable "transit_encryption_enabled" {
