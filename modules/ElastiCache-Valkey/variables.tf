@@ -69,7 +69,7 @@ variable "preferred_availability_zones" {
 variable "transit_encryption_enabled" {
     description = "in transit encryption configuration"
     type = bool 
-    default = false
+    default = true
 }
 
 variable "security_group_ids" {
