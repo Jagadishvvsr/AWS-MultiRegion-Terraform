@@ -1,3 +1,10 @@
+variable "Environment" {
+    description = "environment"
+    type = string
+    default = "dev"
+}
+
+
 variable "global_cluster_identifier" {
     description = "identifies for global cluster identifier"
     type = string
@@ -227,4 +234,46 @@ variable "publicly_accessible" {
     description = "public access for database"
     type = bool
     default = false
+}
+
+variable "secret_kms_key" {
+    description = "kms key to encrypt secret"
+    type = string
+    default = null
+}
+
+variable "rotation_rules" {
+    description = "days to rotate the secret automatically"
+    type = number
+    default = 30
+}
+
+variable "secret_recovery_window_in_days" {
+    description = "recovery of the db secret in days"
+    type = number
+    default = 0
+}
+
+variable "aurora_secret_rotation_role_arn" {
+  description = "lamda fucntion rotation role arn"
+  type = string
+  default = "arn:aws:iam::891612582498:role/aurora_secret_rotation_role"
+}
+
+variable "lambda_function_filename"{
+    description = "Lambda function zip file name"
+    type = string
+    default = "test.zip"
+}
+
+variable "force_overwrite_replica_secret" {
+    description = "force overwrite replica secret"
+    type = bool
+    default = false
+}
+
+variable "secret_replica_region" {
+    description = "secret replica region"
+    type = string
+    default = "us-west-2"
 }

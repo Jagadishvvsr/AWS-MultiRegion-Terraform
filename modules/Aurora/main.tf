@@ -4,6 +4,7 @@ resource "aws_rds_global_cluster" "application_global_cluster_rds" {
   engine                    = var.engine
   engine_version            = var.engine_version
   database_name             = var.database_name
+  storage_encrypted  = true
 }
 
 resource "aws_rds_cluster" "primary_cluster" {
@@ -15,8 +16,11 @@ resource "aws_rds_cluster" "primary_cluster" {
   engine_version            = aws_rds_global_cluster.application_global_cluster_rds.engine_version
   cluster_identifier        = var.primary_cluster_identifier
   master_username           = "username"
-  master_password           = "somepass123"
+  master_password           = jsondecode(aws_secretsmanager_secret_version.db_secret_01.secret_string)["password"]
   database_name             = "example_db"
+
+
+
   global_cluster_identifier = aws_rds_global_cluster.application_global_cluster_rds.id
   db_subnet_group_name      = var.db_subnet_group_name_primary
   availability_zones = var.availability_zones_primary
@@ -52,13 +56,11 @@ resource "aws_rds_cluster" "primary_cluster" {
 
   deletion_protection = var.deletion_protection
 
- /* restore_to_point_in_time {
-    source_cluster_identifier  = aws_rds_cluster.secondary_cluster.id
-    restore_type               = "copy-on-write"
-    use_latest_restorable_time = true
-  } */
-
   performance_insights_kms_key_id = var.performance_insights_kms_key_id_primary
+
+  tags = {
+    Name = "${var.Environment}-appplication-db"
+  }
 
 }
 
@@ -75,6 +77,30 @@ resource "aws_rds_cluster_instance" "primary" {
 
   custom_iam_instance_profile = var.custom_iam_instance_profile_primary
   publicly_accessible = var.publicly_accessible
+
+  tags = {
+    Name = "${var.Environment}-application-db_primary"
+  }
+
+}
+
+resource "aws_rds_cluster_instance" "primary_reader" {
+  # provider             = aws.primary
+  engine               = aws_rds_global_cluster.application_global_cluster_rds.engine
+  engine_version       = aws_rds_global_cluster.application_global_cluster_rds.engine_version
+  identifier           = var.primary_instance_identifier
+  cluster_identifier   = aws_rds_cluster.primary_cluster.id
+  instance_class       = var.primary_instance_class
+  db_subnet_group_name = var.db_subnet_group_name_primary
+
+  auto_minor_version_upgrade = var.auto_minor_version_upgrade
+
+  custom_iam_instance_profile = var.custom_iam_instance_profile_primary
+  publicly_accessible = var.publicly_accessible
+
+  tags = {
+    Name = "${var.Environment}-application-db_primary"
+  }
 
 }
 
@@ -101,6 +127,10 @@ resource "aws_rds_cluster" "secondary_cluster" {
   depends_on = [
     aws_rds_cluster_instance.primary
   ]
+
+  tags = {
+    Name = "${var.Environment}-appplication-db"
+  }
 }
 
 resource "aws_rds_cluster_instance" "secondary" {
@@ -111,4 +141,22 @@ resource "aws_rds_cluster_instance" "secondary" {
   cluster_identifier   = aws_rds_cluster.secondary_cluster.id
   instance_class       = var.secondary_instance_class
   db_subnet_group_name = var.db_subnet_group_name_secondary
+
+   tags = {
+    Name = "${var.Environment}-application-db_secondary"
+  }
+}
+
+resource "aws_rds_cluster_instance" "secondary_reader" {
+  provider             = aws.secondary
+  engine               = aws_rds_global_cluster.application_global_cluster_rds.engine
+  engine_version       = aws_rds_global_cluster.application_global_cluster_rds.engine_version
+  identifier           = var.secondary_instance_identifier
+  cluster_identifier   = aws_rds_cluster.secondary_cluster.id
+  instance_class       = var.secondary_instance_class
+  db_subnet_group_name = var.db_subnet_group_name_secondary
+
+   tags = {
+    Name = "${var.Environment}-application-db_secondary"
+  }
 }
