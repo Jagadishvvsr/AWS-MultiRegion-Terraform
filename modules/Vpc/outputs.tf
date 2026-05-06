@@ -5,16 +5,32 @@ output "vpc_id" {
 
 output "elastic_ip" {
   value = { 
-    for k, v in aws_eip.nat-eip : k => v.id 
+    for k, v in aws_eip.nat_eip : k => v.public_ip
     } 
 }
 
-output "public_subnets" {
-  value = var.public_subnets
+output "public_subnets_ids" {
+  value = {
+    for k , v in aws_subnet.public_subnet : k => v.id
+  }
 }
 
-output "private_subnets" {
-  value = var.private_subnets
+output "private_subnets_ids" {
+  value = {
+   for  k, v in aws_subnet.private_subnet : k => v.id
+  }
+}
+
+output "public_subnet_names" {
+  value = {
+    for k, v in aws_subnet.public_subnet : k => v.tags["Name"]
+  }
+}
+
+output "private_subnet_names" {
+  value = {
+    for k, v in aws_subnet.private_subnet : k => v.tags["Name"]
+  }
 }
 
 output "debug_public_final" {

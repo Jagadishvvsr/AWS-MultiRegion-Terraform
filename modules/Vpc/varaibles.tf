@@ -1,3 +1,10 @@
+variable "Env" {
+  description = "environment"
+  type = string
+  default = "dev"
+}
+
+
 variable "Vpc_Cidr_Block" {
      description = "This is VPC cidr block"
      type= string

@@ -1,0 +1,9 @@
+public_subnet_count = 2
+private_subnet_count = 2
+
+subnet_ids
+launch_template
+template_version
+Primary_instance_type
+Secondary_instance_type
+target_group_arns

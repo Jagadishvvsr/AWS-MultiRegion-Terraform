@@ -65,7 +65,7 @@ resource "aws_vpc" "Custom_vpc" {
   enable_dns_hostnames = var.enable_dns_hostnames 
   
   tags = {
-    name = "custom-vpc"
+    Name = "custom-vpc"
   }
 
 }
@@ -82,7 +82,7 @@ resource "aws_subnet" "public_subnet" {
   #region = var.Vpc_region
 
   tags = {
-    Name = "Public-${each.key}-Env"
+    Name = "Public-${each.key}-${var.Env}"
   }
 }
 
@@ -98,12 +98,12 @@ resource "aws_subnet" "private_subnet"{
   #region = var.Vpc_region
 
   tags = {
-    Name = "Private-${each.key}-Env"
+    Name = "Private-${each.key}-${var.Env}"
   }
 
 }
 
-resource "aws_eip" "nat-eip" {
+resource "aws_eip" "nat_eip" {
  for_each = aws_subnet.public_subnet
  #region = var.Vpc_region
  domain = "vpc"
@@ -123,7 +123,7 @@ resource "aws_internet_gateway" "internetgw" {
 resource "aws_nat_gateway" "public_NAT_gateway" {
  for_each = aws_subnet.public_subnet
 
-  allocation_id = aws_eip.nat-eip[each.key].id
+  allocation_id = aws_eip.nat_eip[each.key].id
   subnet_id     = each.value.id
 
   tags = {
