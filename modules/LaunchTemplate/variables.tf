@@ -33,7 +33,6 @@ variable "instance_profile" {
 variable "template_security_group" {
     description = "Security group Id"
     type = string
-    default = "sg-01c5c288dffd88804"
 }
 
 variable "create_key" {

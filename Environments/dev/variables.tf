@@ -67,6 +67,53 @@ variable "private_offset" {
 }
 
 
+#################################################
+
+############## SECURITY #########################
+
+#################################################
+
+
+/* variable "Custom_vpc" {
+    description = "VPC id"
+    type = string
+} */
+variable "Aurora_inbound_port" {
+    description = "Inbound port for Aurora"
+    type = number
+    default = 5432
+}
+
+variable "ASG_inbound_port_for_ALB" {
+    description = "Inbound port for ASG"
+    type = list(number)
+    default = [443]
+}
+
+variable "ASG_inbound_rules_other" {
+    description = "Allowing inbound resource to ASG"
+    type = map(object({
+        type = string  # sg or cidr
+        source = string  # sg id or cidr block
+        port = number  # port
+    }))
+    default = {}
+}
+
+
+
+variable "Volkey_inbound_port" {
+    description = "Inbound port for volkey"
+    type = number
+    default = 6379
+}
+
+variable "ApplicationLoadBalancer_inbound_port" {
+    description = "Inbound port for volkey"
+    type = number
+    default = 443
+}
+
 
 ###################################################
 
@@ -83,18 +130,18 @@ variable "Environment" {
 variable "Name" {
     description = "name of the load balancer"
     type = string
-    default = "Application-target-group"
+    default = "App-target-group"
 }
 
 
 
 
-variable "vpc_id" {
+/* variable "vpc_id" {
    description = "vpc id for the target group"
    type = string
    default = "vpc-0e217bba014f53293"
   
-}
+} */
 
 
 
@@ -201,6 +248,82 @@ variable "load_balancing_cross_zone_enabled" {
 }
 
 
+################################################
+
+############ LAUNCH TEMPLATE ###################
+
+################################################
+
+
+variable "environment" {
+    description = "Environment of the Template"
+    type = string
+    default = "dev"
+}
+
+variable "Template_name" {
+    description = "name of the template"
+    type = string
+    default = "Application-TL"
+}
+
+
+variable "template_AMI" {
+    description = "blue launch template"
+    type = string 
+    default = "ami-0ec10929233384c7f"
+   
+}
+
+variable "instance_type" {
+    description = "Live instance type "
+    type = string
+    default = "t3.micro"
+}
+
+variable "instance_profile" {
+    description = "Live instance profile "
+    type = string
+    default = null
+} 
+
+/* variable "template_security_group" {
+    description = "Security group Id"
+    type = string
+} */
+
+variable "create_key" {
+  type    = bool
+  default = false
+}
+
+variable "public_key_path" {
+    description = "key file to upload to the instance for access"
+    type = string
+    default = null
+}
+
+variable "instance_keyname" {
+     description = "key for instances"
+     type = string
+     default = "ansible"
+}
+
+
+variable "user_data" {
+   description = "Path user data file for the instance"
+   type = string
+   default = "Scripts/user_data.sh"
+}
+
+
+variable "metadata_hop_limit" {
+    description = "Metadata http put response hop limit"
+    type = number
+    default = 1
+}
+
+
 
 
 ###################################################
@@ -222,10 +345,10 @@ variable "default_instance_warmup"{
     default = 200
  }
 
-variable "subnet_ids" {
+/* variable "subnet_ids" {
   description = "list of subnets"
   type = list(string)
-}
+} */
 
 variable "environement" {
     description = "environement of the ASG"
@@ -268,7 +391,6 @@ variable "min_size" {
 variable "template_version" {
   description = "template version"
   type = number
-  default = 2
 
 }
 
@@ -342,7 +464,7 @@ variable "Policy_scaling_alarm_cpu_low" {
     default = "cpu-low-30"
 }
 
-variable "target_group_arns" {
+/* variable "target_group_arns" {
     description = "target group to be provided"
     type = list(string)
-}
+} */

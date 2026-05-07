@@ -32,9 +32,9 @@ resource "aws_launch_template" "Application_template" {
     instance_metadata_tags      = "enabled"
   }
 
-  network_interfaces {
+  /* network_interfaces {
     associate_public_ip_address = false
-  }
+  } */
 
   monitoring {
     enabled = true

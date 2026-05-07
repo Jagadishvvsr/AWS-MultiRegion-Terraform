@@ -7,7 +7,7 @@ variable "Environment" {
 variable "Name" {
     description = "name of the load balancer"
     type = string
-    default = "Application-target-group"
+    default = "App-target-group"
 }
 
 
