@@ -96,7 +96,7 @@ variable "slow_start" {
 
 
 
-variable "stickiness" {
+variable "TG-stickiness" {
     description = "enable/disable stickness"
     type = object({
         type = string

@@ -57,7 +57,7 @@ variable "min_size" {
 variable "template_version" {
   description = "template version"
   type = number
-  default = 2
+  default = 1
 
 }
 
@@ -97,7 +97,7 @@ variable "Primary_instance_weight_capacity" {
 variable "Secondary_instance_type" {
     description = "Secondary instance type "
     type= string
-    default = "r8a.large"
+    default = "m6a.2xlarge"
 }
 
 variable "Secondary_instance_weight_capacity" {

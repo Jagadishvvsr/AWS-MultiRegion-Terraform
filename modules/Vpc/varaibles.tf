@@ -58,14 +58,14 @@ variable "instance_tenancy" {
 variable "enable_dns_hostnames" {
    description = "enable dns hostnames"
    type = bool
-   default = false
+   default = true
 
 }
 
 variable "enable_dns_support" {
    description = "enable dns support"
    type = bool
-   default = false
+   default = true
 
 }
 

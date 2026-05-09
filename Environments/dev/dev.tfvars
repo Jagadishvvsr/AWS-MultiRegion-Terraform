@@ -39,3 +39,7 @@ Listener_port=80
 Listener_protocol="HTTP"
 #stickiness=
 #stickiness_duration=
+
+# cache
+
+preferred_availability_zones = ["us-east-1a, us-east ]

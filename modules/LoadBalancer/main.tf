@@ -1,5 +1,5 @@
 resource "aws_lb" "Application_load_balancer" {
-  name               = "${var.Name}-${var.Environment}"
+  name               = "${var.ApplicationLB-Name}-${var.Environment}"
   internal           = false
   load_balancer_type = "application"
   security_groups    = var.security_groups
@@ -36,6 +36,6 @@ resource "aws_lb" "Application_load_balancer" {
 
   tags = {
     Environment = var.Environment
-    Name = var.Name
+    Name = var.ApplicationLB-Name
   }
 }

@@ -12,7 +12,7 @@ variable "Aurora_inbound_port" {
 variable "ASG_inbound_port_for_ALB" {
     description = "Inbound port for ASG"
     type = list(number)
-    default = [443]
+    default = [80]
 }
 
 variable "ASG_inbound_rules_other" {
@@ -36,5 +36,5 @@ variable "Volkey_inbound_port" {
 variable "ApplicationLoadBalancer_inbound_port" {
     description = "Inbound port for volkey"
     type = number
-    default = 443
+    default = 80
 }

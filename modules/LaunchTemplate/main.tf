@@ -15,8 +15,8 @@ resource "aws_launch_template" "Application_template" {
   iam_instance_profile {
     name = var.instance_profile
   }
-  disable_api_stop        = true
-  disable_api_termination = true
+  #disable_api_stop        = true
+  #disable_api_termination = true
   ebs_optimized = true
 
   block_device_mappings {

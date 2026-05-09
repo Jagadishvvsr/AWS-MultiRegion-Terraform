@@ -4,7 +4,7 @@ variable "Environment" {
     default = "Dev"
 }
 
-variable "Name" {
+variable "ApplicationLB-Name" {
     description = "name of the load balancer"
     type = string
     default = "Application-load-balancer"

@@ -11,10 +11,10 @@ resource "aws_lb_target_group" "Application_target_group" {
 
 
    stickiness {
-    type            = var.stickiness.type
-    enabled         = var.stickiness.enabled
-    cookie_duration = var.stickiness.cookie_duration
-    cookie_name = var.stickiness.type == "app_cookie" ? var.cookie_name : null
+    type            = var.TG-stickiness.type
+    enabled         = var.TG-stickiness.enabled
+    cookie_duration = var.TG-stickiness.cookie_duration
+    cookie_name = var.TG-stickiness.type == "app_cookie" ? var.cookie_name : null
   }
 
 
