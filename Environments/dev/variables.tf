@@ -219,7 +219,7 @@ variable "slow_start" {
 
 
 
-variable "stickiness" {
+variable "TG-stickiness" {
     description = "enable/disable stickness"
     type = object({
         type = string
@@ -468,3 +468,353 @@ variable "Policy_scaling_alarm_cpu_low" {
     description = "target group to be provided"
     type = list(string)
 } */
+
+
+##################################################
+
+############# LOAD BALANCER ######################
+
+
+##################################################
+
+/* variable "Environment" {
+    description = "Environment of the load balancer"
+    type = string
+    default = "Dev"
+} */
+
+variable "ApplicationLB-Name" {
+    description = "name of the load balancer"
+    type = string
+    default = "Application-load-balancer"
+}
+
+variable "Listener_name" {
+    description = "name tag for the listener"
+    type = string
+    default = "Application-blue-listener"
+}
+
+
+variable "security_groups" {
+    description = "list of security groups for the load balancer"
+    type = list(string)
+    default = ["sg-0ec155aeb26b1f673"]
+}
+
+
+variable "subnet_ids" {
+    description = "list of subnet ids for the load balancer"
+    type = list(string)
+    default = ["subnet-084d349a44e1854e1", "subnet-04035f4c858511081", "subnet-0e6c444e98ba29a85"]
+}
+
+
+
+variable "Listener_port" {
+    description = "Listener port number"
+    type = number
+    default = 80
+}
+
+variable "Listener_protocol" {
+    description = "Listener portocol"
+    type = string
+    default = "HTTP"
+}
+
+variable "HTTPS_ssl_policy" {
+    description = "ssl certificate policy" 
+    type = string
+    default = null
+}
+
+variable "HTTPS_certificate_arn" {
+    description = "ssl certificate arn"
+    type = string
+    default = null
+
+}
+
+/* variable "aws_target_group_blue" {
+    description = "blue target group arn"
+    type = string
+} */
+
+variable "aws_target_group_green" {
+    description = "green target group arn"
+    type = string
+    default = null
+}
+
+
+variable "target_group_blue_weight"{
+    description = "live application target group weight"
+    type = number
+    default = 100
+}
+
+variable "target_group_green_weight"{
+    description = "Release application target group weight"
+    type = number
+    default = 0
+}
+
+variable "stickiness" {
+    description = "enable stickiness"
+    type = bool
+    default = false
+}
+
+variable "stickiness_duration" {
+    description = "stickiness duration"
+    type = number
+    default = 3000
+}
+
+variable "idle_timeout" {
+    description = "load balancer idle timeout period"
+    type = number
+    default = 90
+}
+
+variable "client_keep_alive" {
+    description = "load balancer client http timeout period"
+    type = number
+    default = 60
+}
+
+variable "header_processing" {
+    description = "header processing mode"
+    type = string
+    default = "preserve"
+}
+
+variable "desync_mitigation_mode" {
+  description = "desync mitigation mode"
+  type        = string
+  default     = "defensive"
+
+  validation {
+    condition = contains(
+      ["monitor", "defensive", "strictest"],
+      var.desync_mitigation_mode
+    )
+    error_message = "Must be one of: monitor, defensive, strictest"
+  }
+}
+
+variable "cross_zone_load_balancing" {
+    description = "enable cross zone load balancing"
+    type = bool
+    default = true
+}
+
+variable "enable_deletion_protection" {
+    description = "load balancer deletion protection"
+    type = bool 
+    default = false
+}
+
+variable "zonal_shift" {
+    description = "enable zonal shift in case of zone degradation"
+    type = bool
+    default = false
+}
+
+variable "access_logs" {
+    description = "access logs configuration"
+    type = object({
+        bucket_name = string
+        bucket_prefix = string
+        enable = bool
+    })
+    default = {
+        bucket_name = null
+        bucket_prefix = null
+        enable = false
+    }
+    
+}
+
+variable "connection_logs" {
+    description = "connection logs configuration"
+    type = object({
+        bucket_name = string
+        bucket_prefix = string
+        enable = bool
+    })
+    default = {
+        bucket_name = null
+        bucket_prefix = null
+        enable = false
+    }
+    
+}
+
+variable "health_check_logs" {
+    description = "health check logs configuration"
+    type = object({
+        bucket_name = string
+        bucket_prefix = string
+        enable = bool
+    })
+    default = {
+        bucket_name = null
+        bucket_prefix = null
+        enable = false
+    }
+    
+}
+
+###############################################
+
+################ CACHE ########################
+
+###############################################
+
+variable "name" {
+    description = "Name of the cache cluster-id"
+    type = string
+    default = "application-cross-region"
+}
+
+/* variable "environment" {
+    description = "environment for the cache"
+    type = string
+    default = "dev"
+} */
+
+variable "engine" {
+    description = "cache engine"
+    type = string
+    default = "valkey"
+}
+
+variable "engine_version" {
+    description = "cache engine version"
+    type = string
+    default = "8.2"
+
+    validation {
+     condition     = can(regex("^\\d+\\.\\d+", var.engine_version))
+     error_message = "Engine version must be valid semantic version."
+  }
+}
+
+variable "node_type" {
+    description = "cache node type"
+    type = string
+    default = "cache.c7gn.large"
+}
+
+
+variable "num_cache_clusters" {
+    description = "number of cache clusters"
+    type = number
+    default = 1
+}
+
+
+variable "parameter_group_name" {
+    description = "cache parameter paramete"
+    type = string
+    default = "default.valkey8"
+}
+
+/* variable "port" {
+    description = "cache port"
+    type = number
+    default = 6379
+} */
+ 
+
+variable "cache_subnetgroup_ids" {
+    description = "cache subnet groups ids"
+    type = list(string)
+    default = [ "subnet-04035f4c858511081", "subnet-047cd2924b499baf1", "subnet-0a888a7437dfb6550"]
+}
+
+variable "preferred_availability_zones" {
+    description = "preferred availability zones for cache"
+    type = list(string)
+    default = ["us-east-1a"] # "us-east-1a", "us-east-1d"
+}
+
+variable "transit_encryption_enabled" {
+    description = "in transit encryption configuration"
+    type = bool 
+    default = true
+}
+
+variable "security_group_ids" {
+    description = "security group ids for the cluster"
+    type = list(string)
+    default = ["sg-0808c9d229917ac5d"]
+}
+
+variable "snapshot_retention_limit" {
+    description = "snapshot retention limit in days"
+    type = number
+    default = 1
+}
+
+variable "snapshot_window" {
+    description = "window for daily automatic snapshot time range (in UTC)"
+    type = string
+    default = "03:00-05:00"
+}
+
+variable "maintenance_window" {
+    description = "maintaince window" #The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). min duration is 60 mins
+    type = string
+    default = "sun:05:00-sun:09:00"
+}
+
+variable "auto_minor_version_upgrade" {
+    description = "enable for auto update of minor version on cache"
+    type = bool
+    default = false
+}
+
+variable "sns_topic_arn" {
+    description = "sns topic arn for notification from cache"
+    type = string
+    default = null
+}
+
+
+variable "secondary_region" {
+    description = "Region for secondary replication"
+    type = string
+    default = "us-west-1"
+}
+
+
+variable "slow_log_configuration" {
+    description = "slow log configuration"
+    type = object({
+        destination = string
+        destination_type = string
+        log_format = string
+    })
+    default = ({
+        destination = "elasticCache"
+        destination_type = "cloudwatch-logs"
+        log_format = "text"
+    })
+}
+
+variable "engine_log_configuration" {
+    description = "engine log configuration"
+    type = object({
+        destination = string
+        destination_type = string
+        log_format = string
+    })
+    default = ({
+        destination = "elasticCache"
+        destination_type = "cloudwatch-logs"
+        log_format = "text"
+    })
+}

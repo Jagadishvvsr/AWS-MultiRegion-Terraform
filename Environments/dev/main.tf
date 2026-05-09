@@ -6,6 +6,8 @@ data "aws_availability_zones" "availability_zones" {
 }
 
 
+
+
 module "Custom_vpc" {
     source = "../../modules/Vpc"
     public_subnet_count = var.public_subnet_count
@@ -55,3 +57,17 @@ module "ASG" {
 }
 
 
+module "Application_loadbalancer" {
+  source = "../../modules/LoadBalancer"
+  security_groups = [module.Security.ApplicationLoadBalancer_SG_Id]
+  subnet_ids = module.Custom_vpc.public_subnets_ids
+  aws_target_group_blue=module.blue_target_group.target_group_arn
+  target_group_blue_weight=100
+}
+
+/* module "Elasticache" {
+  source = "../../modules/ElastiCache-Valkey"
+  cache_subnetgroup_ids = module.Custom_vpc.private_subnets_ids
+  preferred_availability_zones = [var.preferred_availability_zones]
+  security_group_ids = module.Security.ElasticacheVolkey_SG_Id
+} */

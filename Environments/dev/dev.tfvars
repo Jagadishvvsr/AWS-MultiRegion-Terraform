@@ -21,8 +21,21 @@ template_version = 1
 #Secondary_instance_type
 #target_group_arns= 
 #subnet_ids=
+Secondary_instance_type = "m6a.2xlarge"
 
 
 
 # TARGET GROUP
 Name = "App-target-group-blue"
+
+
+# LoadBalancer
+
+#aws_target_group_blue=
+#target_group_green_weight=
+#target_group_blue_weight=
+#aws_target_group_green=
+Listener_port=80
+Listener_protocol="HTTP"
+#stickiness=
+#stickiness_duration=
