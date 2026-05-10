@@ -12,7 +12,7 @@ resource "aws_elasticache_replication_group" "application_cross_region_replica_p
   num_cache_clusters      = var.num_cache_clusters
   parameter_group_name = var.parameter_group_name
   engine_version       = var.engine_version
-  port                 = var.port
+  port                 = var.Valkey_port
   subnet_group_name    = aws_elasticache_subnet_group.cache_subnet_groups.name
 
   security_group_ids  = var.security_group_ids

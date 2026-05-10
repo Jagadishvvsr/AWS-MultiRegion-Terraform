@@ -11,13 +11,13 @@ variable "global_cluster_identifier" {
     default = "application-global-cluster"
 }
 
-variable "engine" {
+variable "Aurora_engine" {
     description = "database engine"
     type = string
     default = "aurora-postgresql"
 }
 
-variable "engine_version" {
+variable "Aurora_engine_version" {
     description = "Engine version for postgres"
     type = string
     default = "11.9"
@@ -135,7 +135,7 @@ variable "network_type_primary" {
     default = "IPV4"  ##  Valid values: IPV4, DUAL
 }
 
-variable "port" {
+variable "Aurora_port" {
     description = "port for the database"
     type = number
     default = 6345
@@ -212,7 +212,7 @@ variable "enabled_cloudwatch_logs_exports"{
     default = null ##["general" ,"audit", "error", "instance", "postgresql"]
 }
 
-variable "auto_minor_version_upgrade" {
+variable "Aurora_auto_minor_version_upgrade" {
     description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window"
     type = bool
     default = false

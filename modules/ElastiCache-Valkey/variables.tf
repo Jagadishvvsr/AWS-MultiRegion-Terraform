@@ -47,7 +47,7 @@ variable "parameter_group_name" {
     default = "default.valkey8"
 }
 
-variable "port" {
+variable "Valkey_port" {
     description = "cache port"
     type = number
     default = 6379

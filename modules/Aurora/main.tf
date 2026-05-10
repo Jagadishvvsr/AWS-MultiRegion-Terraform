@@ -1,8 +1,8 @@
 
 resource "aws_rds_global_cluster" "application_global_cluster_rds" {
   global_cluster_identifier = var.global_cluster_identifier
-  engine                    = var.engine
-  engine_version            = var.engine_version
+  engine                    = var.Aurora_engine
+  engine_version            = var.Aurora_engine_version
   database_name             = var.database_name
   storage_encrypted  = true
 }
@@ -10,7 +10,7 @@ resource "aws_rds_global_cluster" "application_global_cluster_rds" {
 resource "aws_rds_cluster" "primary_cluster" {
   #provider                  = aws.primary
 
-  port = var.port
+  port = var.Aurora_port
   cluster_scalability_type = var.cluster_scalability_type_primary
   engine                    = aws_rds_global_cluster.application_global_cluster_rds.engine
   engine_version            = aws_rds_global_cluster.application_global_cluster_rds.engine_version
@@ -73,7 +73,7 @@ resource "aws_rds_cluster_instance" "primary" {
   instance_class       = var.primary_instance_class
   db_subnet_group_name = var.db_subnet_group_name_primary
 
-  auto_minor_version_upgrade = var.auto_minor_version_upgrade
+  auto_minor_version_upgrade = var.Aurora_auto_minor_version_upgrade
 
   custom_iam_instance_profile = var.custom_iam_instance_profile_primary
   publicly_accessible = var.publicly_accessible
@@ -93,7 +93,7 @@ resource "aws_rds_cluster_instance" "primary_reader" {
   instance_class       = var.primary_instance_class
   db_subnet_group_name = var.db_subnet_group_name_primary
 
-  auto_minor_version_upgrade = var.auto_minor_version_upgrade
+  auto_minor_version_upgrade = var.Aurora_auto_minor_version_upgrade
 
   custom_iam_instance_profile = var.custom_iam_instance_profile_primary
   publicly_accessible = var.publicly_accessible
