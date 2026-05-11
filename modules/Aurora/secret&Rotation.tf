@@ -4,7 +4,7 @@
 
 
 resource "aws_secretsmanager_secret" "db_secret" {
-  name = "db_managed_secret-${var.Environment}"
+  name = "db_managed_secret_1-${var.Environment}"
   kms_key_id = var.secret_kms_key
   recovery_window_in_days = var.secret_recovery_window_in_days
   force_overwrite_replica_secret = var.force_overwrite_replica_secret

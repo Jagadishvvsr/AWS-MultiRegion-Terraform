@@ -138,9 +138,9 @@ module "Secondary_Application_loadbalancer" {
 
 module "Elasticache" {
   source = "../../modules/ElastiCache-Valkey"
-  cache_subnetgroup_ids = flatten([module.Custom_vpc.private_subnets_ids , module.Secondary_vpc.private_subnets_ids])  #module.Secondary_vpc.private_subnets_ids
+  cache_subnetgroup_ids = flatten([module.Custom_vpc.private_subnets_ids ])  #module.Secondary_vpc.private_subnets_ids
   #preferred_availability_zones = [var.#preferred_availability_zones]
-  security_group_ids = [module.Security.ElasticacheVolkey_SG_Id, module.Secondary_security.ElasticacheVolkey_SG_Id]
+  security_group_ids = [module.Security.ElasticacheVolkey_SG_Id]
   num_cache_clusters = var.num_cache_clusters
   secondary_region = var.secondary_region
 }
