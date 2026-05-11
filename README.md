@@ -139,4 +139,4 @@ Failover is handled using:
 
 # FULL STACK ARCHITECTURE
 
-![alt text](<Screenshot 2026-03-21 123152.png>)
+![alt text](FULLSTACK_ARCHITECTURE.png)
