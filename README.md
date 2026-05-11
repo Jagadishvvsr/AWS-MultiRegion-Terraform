@@ -28,7 +28,7 @@ The VPC module is fully modular and supports multiple deployment modes:
 
 ## Features
    * Creates public and private subnets automatically
-   * Supports:
+### Supports:
    * Fixed subnet count (public_subnet_count, private_subnet_count)
    * OR custom CIDR + AZ mapping
    * Automatic AZ distribution
